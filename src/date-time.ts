@@ -192,7 +192,7 @@ export class DateTimeCalendar {
 
   public toLocaleTimeString(
     options: Intl.DateTimeFormatOptions = {
-      dateStyle: "long",
+      timeStyle: "long",
     }
   ): string {
     return this.date.toLocaleTimeString(
@@ -203,8 +203,8 @@ export class DateTimeCalendar {
 
   public toLocaleString(
     options: Intl.DateTimeFormatOptions = {
-      dateStyle: "full",
-      timeStyle: "full",
+      dateStyle: "long",
+      timeStyle: "long",
     }
   ): string {
     return this.date.toLocaleString(this.locale.getLocale().baseName, options);
