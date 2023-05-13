@@ -203,7 +203,7 @@ export const LIST: Countries = {
     p: ["20"],
     d: [6, 0, 1, 2, 3, 4, 5],
     e: [6, 5],
-    c: ["gregory", "coptic", "islamic", "islamic-civil", "islamic-tbla"],
+    c: ["gregory", "islamic", "islamic-civil", "islamic-tbla"],
   },
   EH: {
     i: "EH",

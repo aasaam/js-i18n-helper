@@ -65,4 +65,11 @@ describe("formatter", () => {
       expect(f.fileSizeHumanReadable(b)).toBeTruthy();
     }
   });
+
+  it("durationDates", () => {
+    const f = new formatter.Formatter(new Intl.Locale("en").maximize());
+    const d = new Date("2020-01-01");
+    console.log(f.durationDates(d, new Date()));
+    expect(f.durationDates(d, new Date())).toBeTruthy();
+  });
 });

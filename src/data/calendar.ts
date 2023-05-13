@@ -3,7 +3,6 @@
  */
 export const LIST = [
   "buddhist",
-  "coptic",
   "ethioaa",
   "ethiopic",
   "gregory",

@@ -75,26 +75,18 @@ export const RELATIVE_TIME_DIVISION: {
 Object.freeze(RELATIVE_TIME_DIVISION);
 
 export type RelativeTimesTypeReference = {
-  [key in Intl.RelativeTimeFormatUnit]: number;
+  [key in Intl.RelativeTimeFormatUnit]?: number;
 };
 
 export const RELATIVE_TIMES_REFERENCE: RelativeTimesTypeReference = {
   year: 31536000,
-  years: 31536000,
   quarter: 7776000,
-  quarters: 7776000,
   month: 2592000,
-  months: 2592000,
   week: 604800,
-  weeks: 604800,
   day: 86400,
-  days: 86400,
   hour: 3600,
-  hours: 3600,
   minute: 60,
-  minutes: 60,
   second: 1,
-  seconds: 1,
 } as const;
 Object.freeze(RELATIVE_TIMES_REFERENCE);
 
@@ -178,6 +170,33 @@ export class Formatter {
     }).format(Number.parseFloat(byteX));
   }
 
+  public durationDates(
+    date1: Date,
+    date2: Date,
+    unitDisplay: UnitDisplayTypes = "long"
+  ): string {
+    const diffSeconds = Math.abs(
+      Math.round(date1.getTime() - date2.getTime()) / 1000
+    );
+
+    for (const [u, value] of Object.entries(RELATIVE_TIMES_REFERENCE)) {
+      if (diffSeconds >= value) {
+        const number = Math.round(diffSeconds / value);
+        return new Intl.NumberFormat(this.locale.baseName, {
+          style: "unit",
+          unit: u,
+          unitDisplay,
+        }).format(number);
+      }
+    }
+
+    return new Intl.NumberFormat(this.locale.baseName, {
+      style: "unit",
+      unit: "second",
+      unitDisplay,
+    }).format(diffSeconds);
+  }
+
   /**
    * @param compareDate
    * @param unit {Intl.RelativeTimeFormatUnit} unit name
@@ -207,7 +226,7 @@ export class Formatter {
     const pDurationSeconds =
       (compareDate.getTime() - referenceDate.getTime()) / 1000;
 
-    const value = RELATIVE_TIMES_REFERENCE[validUnit] / pDurationSeconds;
+    const value = (RELATIVE_TIMES_REFERENCE[validUnit] ?? 1) / pDurationSeconds;
 
     if (Number.isFinite(value)) {
       return formatter.format(value, validUnit);

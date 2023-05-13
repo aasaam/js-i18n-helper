@@ -32,7 +32,6 @@
 - Supported calendars:
 
   - `buddhist`
-  - `coptic`
   - `ethioaa`
   - `ethiopic`
   - `gregory`
