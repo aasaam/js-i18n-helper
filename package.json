@@ -1,0 +1,51 @@
+{
+  "name": "@aasaam/js-i18n-helper",
+  "version": "0.0.0",
+  "description": "",
+  "repository": "unjs/@aasaam/js-i18n-helper",
+  "license": "MIT",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "vitest dev",
+    "lint": "eslint --cache --ext .ts,.js,.mjs,.cjs . && prettier -c src test",
+    "lint:fix": "eslint --cache --ext .ts,.js,.mjs,.cjs . --fix && prettier -c src test -w",
+    "preview": "rm -rf tmp/luxon && cp -rLf ./node_modules/luxon tmp/",
+    "prepack": "pnpm run build",
+    "release": "pnpm test && changelogen --release && npm publish && git push --follow-tags",
+    "test": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.3.0",
+    "@types/node": "^20.1.0",
+    "@vitest/coverage-c8": "^0.31.0",
+    "changelogen": "^0.5.3",
+    "eslint": "^8.40.0",
+    "eslint-config-unjs": "^0.1.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4",
+    "unbuild": "^1.2.1",
+    "vitest": "^0.31.0"
+  },
+  "packageManager": "pnpm@8.4.0",
+  "dependencies": {
+    "luxon": "^3.3.0"
+  }
+}

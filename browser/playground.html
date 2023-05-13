@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Playground | JavaScript Internationalization Helper</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=2.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/buefy@0.9.23/dist/buefy.min.css"
+      rel="stylesheet"
+    />
+
+    <script type="importmap">
+      {
+        "imports": {
+          "luxon": "https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/es6/luxon.js"
+        }
+      }
+    </script>
+    <style>
+      html,
+      body,
+      select,
+      option,
+      input,
+      textarea,
+      button {
+        font-family: "Courier New", monospace;
+      }
+    </style>
+  </head>
+  <body class="p-6">
+    <div id="app" class="container is-fluid">
+      <section class="hero is-primary mb-6">
+        <div class="hero-body">
+          <p class="title">JavaScript Internationalization Helper</p>
+          <p class="subtitle">Playground</p>
+        </div>
+      </section>
+      <div class="columns">
+        <div class="column is-6">
+          <b-field label="Language:">
+            <b-select
+              expanded
+              v-model="lang"
+              @input="updateLocale({ lang: lang })"
+              placeholder="Language"
+            >
+              <option
+                v-for="option in languageList"
+                :value="option.id"
+                :key="option.id"
+              >
+                {{ option.id }} {{ option.name }} {{ option.nativeName }}
+              </option>
+            </b-select>
+          </b-field>
+        </div>
+        <div class="column is-6">
+          <b-field label="Country:">
+            <b-select
+              expanded
+              v-model="country"
+              @input="updateLocale({ country: country })"
+              placeholder="Country"
+            >
+              <option
+                v-for="option in countryList"
+                :value="option.i"
+                :key="option.i"
+              >
+                {{ option.f }} {{ option.name }}
+              </option>
+            </b-select>
+          </b-field>
+        </div>
+      </div>
+      <div class="columns">
+        <b-tabs expanded v-model="tab">
+          <b-tab-item label="Properties">
+            <div class="table-container">
+              <table class="table is-fullwidth is-hoverable is-striped">
+                <thead>
+                  <tr>
+                    <th><abbr title="Property">Property</abbr></th>
+                    <th><abbr title="Value">Value</abbr></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="2" class="has-text-centered is-size-1">
+                      {{ locale.getCountry().f }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Country code</td>
+                    <td><code>{{ locale.getCountry().i }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>Currencies</td>
+                    <td><code>{{ locale.getCountry().u }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>Telephone prefixes</td>
+                    <td><code>{{ locale.getCountry().p }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>Preferred calendars</td>
+                    <td><code>{{ locale.getCountry().c }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>JavaScript Week Days Order</td>
+                    <td><code>{{ locale.getCountry().d }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>JavaScript Weekend Days</td>
+                    <td><code>{{ locale.getCountry().e }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>Timezone Identifier</td>
+                    <td><code>{{ i18n.timezone.getIdentifier() }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>Text direction</td>
+                    <td><code>{{ locale.getTextDirection() }}</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </b-tab-item>
+          <b-tab-item label="Date Time Calendar">
+            <div class="columns">
+              <div class="column">
+                <b-field label="Date:">
+                  <b-datetimepicker
+                    v-model="date"
+                    placeholder="Date"
+                    icon="calendar-today"
+                    @input="updateCalendar({ date: date })"
+                    locale="en-US"
+                    editable
+                  >
+                  </b-datetimepicker>
+                </b-field>
+              </div>
+              <div class="column">
+                <b-field label="Calendar:">
+                  <b-select
+                    expanded
+                    v-model="calendar"
+                    @input="updateLocale({ calendar: calendar })"
+                    placeholder="Calendar"
+                  >
+                    <option
+                      v-for="option in calendarList"
+                      :value="option.id"
+                      :key="option.id"
+                    >
+                      <template v-if="option.preferred">💜</template>
+                      <template v-if="!option.preferred">🤍</template>
+                      {{ option.name }}
+                    </option>
+                  </b-select>
+                </b-field>
+              </div>
+            </div>
+
+            <div class="columns">
+              <div class="column is-4">
+                <b-field label="Year:">
+                  <b-select
+                    expanded
+                    v-model="year"
+                    @input="updateCalendar({ year })"
+                    placeholder="Year"
+                  >
+                    <option
+                      v-for="option in dateTimeCalendar.yearList()"
+                      :value="option.number"
+                      :key="option.number"
+                    >
+                      {{ option.name }}
+                    </option>
+                  </b-select>
+                </b-field>
+              </div>
+              <div class="column is-4">
+                <b-field label="Month:">
+                  <b-select
+                    expanded
+                    v-model="month"
+                    @input="updateCalendar({ date: month })"
+                    placeholder="Month"
+                  >
+                    <option
+                      v-for="option in dateTimeCalendar.monthList()"
+                      :value="option.date"
+                      :key="option.date"
+                    >
+                      {{ option.name }}
+                    </option>
+                  </b-select>
+                </b-field>
+              </div>
+              <div class="column is-4">
+                <b-field label="Day:">
+                  <b-select
+                    expanded
+                    @input="updateCalendar({ date: day })"
+                    v-model="day"
+                    placeholder="Day"
+                  >
+                    <option
+                      v-for="option in dateTimeCalendar.daysOfMonthList()"
+                      :value="option.date"
+                      :key="option.date"
+                    >
+                      {{ option.name }}
+                    </option>
+                  </b-select>
+                </b-field>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column">
+                <table
+                  class="table is-fullwidth is-hoverable is-striped"
+                  :dir="locale.getTextDirection()"
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        width="14.28%"
+                        v-for="d in weeks.header"
+                        class="has-text-centered"
+                      >
+                        <abbr :title="d.narrow">{{ d.long }}</abbr>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="i in weeks.weeks">
+                      <td v-for="j in i" class="has-text-centered">
+                        <div v-if="j">
+                          <b-button
+                            expanded
+                            v-bind:class="{ 'is-danger': j.weekEnd, 'is-primary': j.selected }"
+                            v-if="!j.selected"
+                            @click="updateCalendar({ date: j.date })"
+                            >{{ j.name }}</b-button
+                          >
+                          <b-button
+                            expanded
+                            v-bind:class="{ 'is-danger': j.weekEnd, 'is-primary': j.selected }"
+                            v-if="j.selected"
+                            disabled
+                            >{{ j.name }}</b-button
+                          >
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column">
+                <p
+                  class="is-size-2 has-text-centered"
+                  :dir="locale.getTextDirection()"
+                >
+                  {{ dateTimeCalendar.toLocaleString() }}
+                </p>
+                <hr />
+                <p
+                  class="is-size-3 has-text-centered"
+                  :dir="locale.getTextDirection()"
+                >
+                  {{
+                  locale.getFormatter().approximateRelativeTimeFormatter(date)
+                  }}
+                </p>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column">
+                <table
+                  :dir="locale.getTextDirection()"
+                  class="table is-fullwidth is-hoverable is-striped"
+                >
+                  <thead>
+                    <tr>
+                      <th colspan="5" class="has-text-centered">
+                        <p class="is-size-3">Alternate Calendars</p>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>
+                        <abbr>Is preferred?</abbr>
+                      </th>
+                      <th>
+                        <abbr>Calendar Name</abbr>
+                      </th>
+                      <th>
+                        <abbr>Date string</abbr>
+                      </th>
+                      <th>
+                        <abbr>Year</abbr>
+                      </th>
+                      <th>
+                        <abbr>Month</abbr>
+                      </th>
+                      <th>
+                        <abbr>Day</abbr>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="i in dateTimeCalendar.getAlternateCalendars()">
+                      <td>
+                        <template v-if="i.preferred">💜</template>
+                        <template v-if="!i.preferred">🤍</template>
+                      </td>
+                      <td>{{ i.calendarName }}</td>
+                      <td>{{ i.dateString }}</td>
+                      <td>{{ i.year }}</td>
+                      <td>{{ i.monthName }} [{{ i.month }}]</td>
+                      <td>{{ i.day }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </b-tab-item>
+          <b-tab-item label="Units">
+            <b-field label="Number">
+              <b-numberinput
+                v-model="unitNumber"
+                step="0.01"
+                @input="updateUnits()"
+                min="0"
+                max="999999"
+              >
+              </b-numberinput>
+            </b-field>
+            <div class="table-container">
+              <table class="table is-fullwidth is-hoverable is-striped">
+                <thead>
+                  <tr>
+                    <th><abbr title="Unit">Unit</abbr></th>
+                    <th><abbr title="Mode">Mode</abbr></th>
+                    <th><abbr title="Value">Value</abbr></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="u in units">
+                    <td><code>{{ u.unit }}</code></td>
+                    <td><code>{{ u.mode }}</code></td>
+                    <td>{{ u.value }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </b-tab-item>
+        </b-tabs>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/buefy@0.9.23/dist/buefy.min.js"></script>
+    <script type="module" src="./playground.js"></script>
+  </body>
+</html>
