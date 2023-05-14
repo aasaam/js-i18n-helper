@@ -352,7 +352,10 @@
               </b-numberinput>
             </b-field>
             <div class="table-container">
-              <table class="table is-fullwidth is-hoverable is-striped">
+              <table
+                :dir="locale.getTextDirection()"
+                class="table is-fullwidth is-hoverable is-striped"
+              >
                 <thead>
                   <tr>
                     <th><abbr title="Unit">Unit</abbr></th>
@@ -361,6 +364,15 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr v-if="locale.getCountry().u && locale.getCountry().u[0]">
+                    <td><code>{{ locale.getCountry().i }}</code></td>
+                    <td><code>{{ locale.getCountry().u[0] }}</code></td>
+                    <td>
+                      {{ locale.getFormatter().getNumberFormat({ style:
+                      "currency", currency: locale.getCountry().u[0]
+                      }).format(unitNumber) }}
+                    </td>
+                  </tr>
                   <tr v-for="u in units">
                     <td><code>{{ u.unit }}</code></td>
                     <td><code>{{ u.mode }}</code></td>

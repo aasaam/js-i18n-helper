@@ -5,7 +5,7 @@ import * as calendar from "./data/calendar";
 import { groupBy } from "./helpers";
 
 export const MAX_SUPPORTED_YEAR_LIST = 500;
-export const MAX_DAYS_IN_YEAR = 400;
+export const MAX_DAYS_IN_YEAR = 500;
 export const MAX_DAYS_IN_MONTH = 40;
 Object.freeze(MAX_SUPPORTED_YEAR_LIST);
 Object.freeze(MAX_DAYS_IN_YEAR);
@@ -398,22 +398,26 @@ export class DateTimeCalendar {
       this.date
     );
     const result: MonthOption[] = [];
+
+    const used: { [key: string]: true } = {};
+
     for (let i = -MAX_DAYS_IN_YEAR; i <= MAX_DAYS_IN_YEAR; i += 1) {
       const dt = DateTime.fromJSDate(this.date).plus({ day: i });
       const jsDate = dt.toJSDate();
 
-      const [iterateYear, iterateDay] = this.tokenize(["yyyy", "d"], jsDate);
+      const [iterateYear, titleInt] = this.tokenize(["yyyy", "M"], jsDate);
 
-      if (iterateYear === currentYear && currentDay === iterateDay) {
-        const [titleInt] = this.tokenize(["M"], jsDate);
+      const nameNumber = this.format("M", jsDate);
 
+      if (iterateYear === currentYear && !used[nameNumber]) {
         result.push({
           date: jsDate,
           selected: titleInt === currentMonth,
           name: this.format("MMMM", jsDate),
-          nameNumber: this.format("M", jsDate),
+          nameNumber,
           number: titleInt,
         });
+        used[nameNumber] = true;
       }
     }
 
