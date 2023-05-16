@@ -48,3 +48,5 @@ export function isCountrySupported(countryCode) {
 
   return countryCode !== name;
 }
+
+// __GENERATED_TIME__

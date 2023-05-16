@@ -62,6 +62,7 @@ export interface WeekHeader {
   short: string;
   long: string;
   narrow: string;
+  weekEnd: boolean;
 }
 
 export interface DayAlternateCalendar {
@@ -300,7 +301,7 @@ export class DateTimeCalendar {
   public yearList(before = -120, after = 20): YearOption[] {
     const start = Math.round(before);
     const end = Math.round(after);
-    const diff = Math.abs(start) + Math.abs(start);
+    const diff = Math.abs(start) + Math.abs(after);
 
     if (diff > MAX_SUPPORTED_YEAR_LIST) {
       throw new RangeError(
@@ -532,6 +533,7 @@ export class DateTimeCalendar {
           short: this.format("EEE", day.date),
           long: this.format("EEEE", day.date),
           narrow: this.format("EEEEE", day.date),
+          weekEnd: day.weekEnd,
         };
         weekNames[day.weekDay] = weekHeader;
       }

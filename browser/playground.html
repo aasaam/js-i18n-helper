@@ -242,7 +242,14 @@
                         v-for="d in weeks.header"
                         class="has-text-centered"
                       >
-                        <abbr :title="d.narrow">{{ d.long }}</abbr>
+                        <template v-if="d.weekEnd">
+                          <abbr :title="d.narrow" class="has-text-danger"
+                            >{{ d.long }}</abbr
+                          >
+                        </template>
+                        <template v-if="!d.weekEnd">
+                          <abbr :title="d.narrow">{{ d.long }}</abbr>
+                        </template>
                       </th>
                     </tr>
                   </thead>
@@ -252,14 +259,14 @@
                         <div v-if="j">
                           <b-button
                             expanded
-                            v-bind:class="{ 'is-danger': j.weekEnd, 'is-primary': j.selected }"
+                            v-bind:class="{ 'has-text-danger': j.weekEnd, 'is-primary': j.selected }"
                             v-if="!j.selected"
                             @click="updateCalendar({ date: j.date })"
                             >{{ j.name }}</b-button
                           >
                           <b-button
                             expanded
-                            v-bind:class="{ 'is-danger': j.weekEnd, 'is-primary': j.selected }"
+                            v-bind:class="{ 'has-text-danger': j.weekEnd, 'is-primary': j.selected }"
                             v-if="j.selected"
                             disabled
                             >{{ j.name }}</b-button
@@ -298,8 +305,8 @@
                 >
                   <thead>
                     <tr>
-                      <th colspan="5" class="has-text-centered">
-                        <p class="is-size-3">Alternate Calendars</p>
+                      <th colspan="6" class="has-text-centered">
+                        <p class="is-size-3">Alternate Calendars:</p>
                       </th>
                     </tr>
                     <tr>
@@ -390,3 +397,4 @@
     <script type="module" src="./playground.js"></script>
   </body>
 </html>
+<!-- __GENERATED_TIME__ -->

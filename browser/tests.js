@@ -119,5 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#not-supported").remove();
   }
 });
-// mocha.checkLeaks();
+mocha.checkLeaks();
 mocha.run();
+
+// __GENERATED_TIME__
