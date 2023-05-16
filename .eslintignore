@@ -1,0 +1,6 @@
+node_modules
+coverage
+dist
+browser
+tmp
+vite.config.js

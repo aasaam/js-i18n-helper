@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Browser testing page | JavaScript Internationalization Helper</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=2.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/mocha@10.2.0/mocha.css"
+    />
+    <script type="importmap">
+      {
+        "imports": {
+          "luxon": "https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/es6/luxon.js"
+        }
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chai@4.3.7/chai.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mocha@10.2.0/mocha.js"></script>
+    <style>
+      :root {
+        color-scheme: only light;
+      }
+      html,
+      body,
+      input,
+      select,
+      textarea,
+      #mocha {
+        font-family: "Courier New", monospace;
+      }
+      #mocha-stats {
+        top: 72px;
+      }
+      body {
+        padding: 16px;
+        font-size: 1.2em;
+      }
+      #user-agent {
+        padding: 8px;
+        background-color: var(--mocha-color);
+        color: var(--mocha-bg-color);
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <p>You need enable JavaScript</p>
+    </noscript>
+    <p id="not-supported">Your browser not supported.</p>
+    <pre
+      id="user-agent"
+    ><script>document.write(navigator.userAgent);</script></pre>
+    <div id="mocha"></div>
+    <script type="module">
+      mocha.setup("bdd");
+    </script>
+    <script type="module" src="./tests.js"></script>
+  </body>
+</html>
+<!-- 2023-05-16T09:45:57 -->
