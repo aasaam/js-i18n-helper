@@ -33,7 +33,7 @@
     "test": "vitest run --coverage"
   },
   "devDependencies": {
-    "@types/luxon": "^3.3.0",
+    "@types/luxon": "^3.3.1",
     "@types/node": "^20.1.0",
     "@vitest/coverage-c8": "^0.31.0",
     "changelogen": "^0.5.3",
